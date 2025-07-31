@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# Startup script for Azure App Service
-echo "Starting Sundar Marbles Django Backend..."
+# Azure App Service Startup Script for Django
+echo "=== Starting Sundar Marbles Django Backend ==="
 
-# FORCE Django settings module for production  
+# Force production environment
 export DJANGO_SETTINGS_MODULE=sundar_marbles.settings_production
+export DEBUG=False
+export SECRET_KEY="kTvi#=!ucz6tMDQpqK=W#t0y^y7yzXxLUCN5xc^uy3F^MzAv(N"
+export DATABASE_URL="postgresql://neondb_owner:npg_ZzwJrU9kzI9F:WvOhSl7WP2FZqgzh2E2H1qQxvZvuE@ep-mute-hall-a5c2krpx.us-east-2.aws.neon.tech/neondb?sslmode=require"
 
 # Install dependencies
 echo "Installing dependencies..."
@@ -12,12 +15,31 @@ pip install -r requirements.txt
 
 # Collect static files
 echo "Collecting static files..."
-python manage.py collectstatic --noinput
+python manage.py collectstatic --noinput --clear
 
-# Run migrations
-echo "Running migrations..."
+# Run database migrations
+echo "Running database migrations..."
 python manage.py migrate --noinput
 
-# Start the application
-echo "Starting Django application..."
-gunicorn sundar_marbles.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 120
+# Create superuser if it doesn't exist
+echo "Creating superuser..."
+python manage.py shell << EOF
+from django.contrib.auth import get_user_model
+User = get_user_model()
+if not User.objects.filter(username='admin').exists():
+    User.objects.create_superuser('admin', 'admin@sundarmarbles.com', 'admin123456')
+    print("Superuser created: admin / admin123456")
+else:
+    print("Superuser already exists")
+EOF
+
+# Start the application with gunicorn
+echo "Starting Django application with gunicorn..."
+exec gunicorn azure_wsgi:application \
+    --bind 0.0.0.0:8000 \
+    --workers 2 \
+    --timeout 300 \
+    --max-requests 1000 \
+    --max-requests-jitter 100 \
+    --preload \
+    --log-level info

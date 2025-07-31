@@ -15,12 +15,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'kTvi#=!ucz6tMDQpqK=W#t0y^y7yzXxLUCN5xc^uy3F^MzAv(N'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = False
 
 # Allow all hosts for Azure (you can restrict this later)
 ALLOWED_HOSTS = [
-    
-    
+    'localhost',
+    '127.0.0.1',
     'sundarmarbles.live',
     'www.sundarmarbles.live',
     'sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net',
