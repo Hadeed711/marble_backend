@@ -1,4 +1,7 @@
-# Django Configuration
+# Azure App Service Configuration
+# These environment variables need to be set in Azure App Service -> Configuration -> Application Settings
+
+# Django Core Settings
 DEBUG=False
 SECRET_KEY=kTvi#=!ucz6tMDQpqK=W#t0y^y7yzXxLUCN5xc^uy3F^MzAv(N
 ALLOWED_HOSTS=localhost,127.0.0.1,sundarmarbles.live,www.sundarmarbles.live,sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net
@@ -6,12 +9,12 @@ ALLOWED_HOSTS=localhost,127.0.0.1,sundarmarbles.live,www.sundarmarbles.live,sund
 # Database Configuration (Neon PostgreSQL)
 DATABASE_URL=postgresql://neondb_owner:npg_ZzwJrU9kzI9F:WvOhSl7WP2FZqgzh2E2H1qQxvZvuE@ep-mute-hall-a5c2krpx.us-east-2.aws.neon.tech/neondb?sslmode=require
 
+# CORS Settings for Frontend
+CORS_ALLOWED_ORIGINS=https://sundarmarbles.live,https://www.sundarmarbles.live,http://localhost:3000,http://localhost:5173
+
 # WhatsApp API Configuration
 WHATSAPP_NUMBER=923006641727
 WHATSAPP_API_URL=https://api.whatsapp.com/send
-
-# CORS Settings for Frontend
-CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173,https://sundarmarbles.live,https://www.sundarmarbles.live
 
 # Media and Static Files
 MEDIA_URL=/media/
@@ -19,13 +22,13 @@ STATIC_URL=/static/
 MEDIA_ROOT=media
 STATIC_ROOT=staticfiles
 
-# Email Configuration (Optional - configure with your Gmail app password)
+# Email Configuration
 EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USE_TLS=True
 EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
+EMAIL_HOST_PASSWORD=your-gmail-app-password
 DEFAULT_FROM_EMAIL=your-email@gmail.com
 
 # Admin Configuration

@@ -1,0 +1,19 @@
+# Azure App Service deployment configuration
+# This file is used by Azure to configure the Python environment
+
+[build]
+# Python version
+python_version = "3.11"
+
+# Build command
+build_command = "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
+
+# Start command
+start_command = "gunicorn sundar_marbles.wsgi:application --bind 0.0.0.0:$PORT"
+
+[environment]
+# Django settings module
+DJANGO_SETTINGS_MODULE = "sundar_marbles.settings"
+
+# Production flag
+PRODUCTION = "True"

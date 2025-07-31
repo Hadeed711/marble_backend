@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Environment Variables Setup - Sundar Marbles</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        .error-box {
+            background: #ffe6e6;
+            border: 1px solid #ff6b6b;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success-box {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .env-var {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+        .step {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .important {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        ol {
+            counter-reset: step-counter;
+        }
+        ol li {
+            counter-increment: step-counter;
+            margin: 15px 0;
+        }
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚨 Azure Environment Variables Setup Required</h1>
+        
+        <div class="error-box">
+            <strong>Current Issue:</strong> Your Django backend at 
+            <code>https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/</code> 
+            is showing a "DisallowedHost" error because the environment variables are not properly configured in Azure.
+        </div>
+
+        <h2>📋 Quick Fix Steps</h2>
+        
+        <div class="step">
+            <strong>Step 1:</strong> Go to your Azure App Service dashboard
+        </div>
+        
+        <div class="step">
+            <strong>Step 2:</strong> Navigate to <strong>Configuration → Application Settings</strong>
+        </div>
+        
+        <div class="step">
+            <strong>Step 3:</strong> Add each environment variable below (click "New application setting" for each one)
+        </div>
+
+        <h2>🔧 Environment Variables to Add</h2>
+        
+        <div class="important">
+            <strong>⚠️ Important:</strong> Copy each variable exactly as shown below. Make sure there are no extra spaces.
+        </div>
+
+        <h3>Core Django Settings</h3>
+        <div class="env-var">
+            <strong>Name:</strong> DEBUG<br>
+            <strong>Value:</strong> False
+        </div>
+        
+        <div class="env-var">
+            <strong>Name:</strong> SECRET_KEY<br>
+            <strong>Value:</strong> kTvi#=!ucz6tMDQpqK=W#t0y^y7yzXxLUCN5xc^uy3F^MzAv(N
+        </div>
+        
+        <div class="env-var">
+            <strong>Name:</strong> ALLOWED_HOSTS<br>
+            <strong>Value:</strong> localhost,127.0.0.1,sundarmarbles.live,www.sundarmarbles.live,sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net
+        </div>
+
+        <h3>Database Configuration</h3>
+        <div class="env-var">
+            <strong>Name:</strong> DATABASE_URL<br>
+            <strong>Value:</strong> postgresql://neondb_owner:npg_ZzwJrU9kzI9F:WvOhSl7WP2FZqgzh2E2H1qQxvZvuE@ep-mute-hall-a5c2krpx.us-east-2.aws.neon.tech/neondb?sslmode=require
+        </div>
+
+        <h3>CORS Configuration</h3>
+        <div class="env-var">
+            <strong>Name:</strong> CORS_ALLOWED_ORIGINS<br>
+            <strong>Value:</strong> https://sundarmarbles.live,https://www.sundarmarbles.live,http://localhost:3000,http://localhost:5173
+        </div>
+
+        <h3>WhatsApp Integration</h3>
+        <div class="env-var">
+            <strong>Name:</strong> WHATSAPP_NUMBER<br>
+            <strong>Value:</strong> 923006641727
+        </div>
+        
+        <div class="env-var">
+            <strong>Name:</strong> WHATSAPP_API_URL<br>
+            <strong>Value:</strong> https://api.whatsapp.com/send
+        </div>
+
+        <h3>File Storage</h3>
+        <div class="env-var">
+            <strong>Name:</strong> MEDIA_URL<br>
+            <strong>Value:</strong> /media/
+        </div>
+        
+        <div class="env-var">
+            <strong>Name:</strong> STATIC_URL<br>
+            <strong>Value:</strong> /static/
+        </div>
+        
+        <div class="env-var">
+            <strong>Name:</strong> MEDIA_ROOT<br>
+            <strong>Value:</strong> media
+        </div>
+        
+        <div class="env-var">
+            <strong>Name:</strong> STATIC_ROOT<br>
+            <strong>Value:</strong> staticfiles
+        </div>
+
+        <h3>Email Configuration (Optional)</h3>
+        <div class="env-var">
+            <strong>Name:</strong> EMAIL_BACKEND<br>
+            <strong>Value:</strong> django.core.mail.backends.smtp.EmailBackend
+        </div>
+        
+        <div class="env-var">
+            <strong>Name:</strong> EMAIL_HOST<br>
+            <strong>Value:</strong> smtp.gmail.com
+        </div>
+        
+        <div class="env-var">
+            <strong>Name:</strong> EMAIL_PORT<br>
+            <strong>Value:</strong> 587
+        </div>
+        
+        <div class="env-var">
+            <strong>Name:</strong> EMAIL_USE_TLS<br>
+            <strong>Value:</strong> True
+        </div>
+
+        <h3>Admin Configuration</h3>
+        <div class="env-var">
+            <strong>Name:</strong> ADMIN_EMAIL<br>
+            <strong>Value:</strong> admin@sundarmarbles.com
+        </div>
+
+        <h2>🔄 Final Steps</h2>
+        
+        <ol>
+            <li>After adding all environment variables, click <strong>"Save"</strong> in Azure</li>
+            <li>Your app will automatically restart</li>
+            <li>Wait 2-3 minutes for the restart to complete</li>
+            <li>Visit your backend URL again: <a href="https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/" target="_blank">https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/</a></li>
+            <li>Access admin panel: <a href="https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/admin/" target="_blank">https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/admin/</a></li>
+        </ol>
+
+        <div class="success-box">
+            <strong>✅ Once Complete:</strong> Your Django backend will be fully functional with admin panel access at <code>/admin/</code> and API endpoints for your frontend integration.
+        </div>
+
+        <h2>🔗 API Endpoints Available</h2>
+        <div class="code-block">
+GET /api/products/categories/     - Product categories
+GET /api/products/               - All products with filtering
+GET /api/products/featured/      - Featured products
+GET /api/gallery/categories/     - Gallery categories  
+GET /api/gallery/images/         - Gallery images
+POST /api/contact/messages/      - Submit contact form
+GET /api/contact/whatsapp/       - WhatsApp integration
+        </div>
+    </div>
+</body>
+</html>
