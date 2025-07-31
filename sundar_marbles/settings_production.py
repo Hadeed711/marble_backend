@@ -80,15 +80,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'sundar_marbles.wsgi.application'
 
 # Database - Use Neon PostgreSQL with enhanced configuration
-DATABASE_URL = 'postgresql://neondb_owner:npg_ZzwJrU9kzI9F:WvOhSl7WP2FZqgzh2E2H1qQxvZvuE@ep-mute-hall-a5c2krpx.us-east-2.aws.neon.tech/neondb?sslmode=require'
+DATABASE_URL = 'postgresql://neondb_owner:npg_qrXsNK3Jpk8i@ep-divine-tooth-a8gxgnc6-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'neondb',
-        'USER': 'neondb_owner',
-        'PASSWORD': 'npg_ZzwJrU9kzI9F:WvOhSl7WP2FZqgzh2E2H1qQxvZvuE',
-        'HOST': 'ep-mute-hall-a5c2krpx.us-east-2.aws.neon.tech',
+        'USER': 'neondb_owner', 
+        'PASSWORD': 'npg_qrXsNK3Jpk8i',
+        'HOST': 'ep-divine-tooth-a8gxgnc6-pooler.eastus2.azure.neon.tech',
         'PORT': '5432',
         'OPTIONS': {
             'sslmode': 'require',
