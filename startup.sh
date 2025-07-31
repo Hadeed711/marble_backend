@@ -13,25 +13,59 @@ export DATABASE_URL="postgresql://neondb_owner:npg_ZzwJrU9kzI9F:WvOhSl7WP2FZqgzh
 echo "Installing dependencies..."
 pip install -r requirements.txt
 
+# Test database connection
+echo "Testing database connection..."
+python -c "
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sundar_marbles.settings_production')
+import django
+django.setup()
+from django.db import connection
+try:
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT 1')
+        print('✅ Database connection successful')
+except Exception as e:
+    print(f'❌ Database connection failed: {e}')
+"
+
+# Run database migrations with verbose output
+echo "Running database migrations..."
+python manage.py migrate --verbosity=2
+
 # Collect static files
 echo "Collecting static files..."
 python manage.py collectstatic --noinput --clear
 
-# Run database migrations
-echo "Running database migrations..."
-python manage.py migrate --noinput
-
 # Create superuser if it doesn't exist
 echo "Creating superuser..."
-python manage.py shell << EOF
+python manage.py shell << 'PYTHON_SCRIPT'
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sundar_marbles.settings_production')
+import django
+django.setup()
+
 from django.contrib.auth import get_user_model
 User = get_user_model()
-if not User.objects.filter(username='admin').exists():
-    User.objects.create_superuser('admin', 'admin@sundarmarbles.com', 'admin123456')
-    print("Superuser created: admin / admin123456")
+
+# Delete existing admin user if exists
+if User.objects.filter(username='admin').exists():
+    User.objects.filter(username='admin').delete()
+    print("Deleted existing admin user")
+
+# Create new superuser
+try:
+    user = User.objects.create_superuser('admin', 'admin@sundarmarbles.com', 'admin123456')
+    print("✅ Superuser created successfully: admin / admin123456")
+except Exception as e:
+    print(f"❌ Failed to create superuser: {e}")
+
+# Verify user creation
+if User.objects.filter(username='admin').exists():
+    print("✅ Admin user verified in database")
 else:
-    print("Superuser already exists")
-EOF
+    print("❌ Admin user not found in database")
+PYTHON_SCRIPT
 
 # Start the application with gunicorn
 echo "Starting Django application with gunicorn..."
