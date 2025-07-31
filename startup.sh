@@ -3,16 +3,20 @@
 # Startup script for Azure App Service
 echo "Starting Sundar Marbles Django Backend..."
 
-# Set Django settings module for production
+# FORCE Django settings module for production  
 export DJANGO_SETTINGS_MODULE=sundar_marbles.settings_production
 
 # Install dependencies
 echo "Installing dependencies..."
 pip install -r requirements.txt
 
-# Run the production setup command
-echo "Running production setup..."
-python manage.py setup_production
+# Collect static files
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
+
+# Run migrations
+echo "Running migrations..."
+python manage.py migrate --noinput
 
 # Start the application
 echo "Starting Django application..."
