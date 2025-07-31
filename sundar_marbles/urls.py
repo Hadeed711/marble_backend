@@ -37,8 +37,11 @@ urlpatterns = [
     path('test/login/', test_login, name='test_login'),
 ]
 
-# Serve media files in development
+# Serve media files in development and production
 if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    # In production, serve media files through Django (Azure doesn't support static file serving by default)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Admin site customization
