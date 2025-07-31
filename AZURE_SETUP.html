@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Environment Variables Setup - Sundar Marbles</title>
+    <title>Azure Fix Instructions - Sundar Marbles</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -21,7 +21,7 @@
         }
         h1 {
             color: #2c3e50;
-            border-bottom: 3px solid #3498db;
+            border-bottom: 3px solid #e74c3c;
             padding-bottom: 10px;
         }
         h2 {
@@ -35,37 +35,25 @@
             padding: 15px;
             margin: 20px 0;
         }
-        .success-box {
+        .solution-box {
             background: #e8f5e8;
             border: 1px solid #4caf50;
             border-radius: 5px;
             padding: 15px;
             margin: 20px 0;
         }
-        .code-block {
-            background: #2d3748;
-            color: #e2e8f0;
-            padding: 20px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            overflow-x: auto;
-            margin: 15px 0;
-        }
-        .env-var {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-        }
         .step {
             background: #e3f2fd;
             border-left: 4px solid #2196f3;
             padding: 15px;
             margin: 15px 0;
+        }
+        .code-inline {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #dee2e6;
         }
         .important {
             background: #fff3cd;
@@ -81,153 +69,82 @@
             counter-increment: step-counter;
             margin: 15px 0;
         }
-        .highlight {
-            background: #ffeb3b;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚨 Azure Environment Variables Setup Required</h1>
+        <h1>🚨 Critical Fix Required - Environment Variables Not Working</h1>
         
         <div class="error-box">
-            <strong>Current Issue:</strong> Your Django backend at 
-            <code>https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/</code> 
-            is showing a "DisallowedHost" error because the environment variables are not properly configured in Azure.
+            <strong>Problem:</strong> Your Azure deployment is not reading environment variables. 
+            The settings show it's still using default values instead of your configuration.
         </div>
 
-        <h2>📋 Quick Fix Steps</h2>
-        
-        <div class="step">
-            <strong>Step 1:</strong> Go to your Azure App Service dashboard
-        </div>
-        
-        <div class="step">
-            <strong>Step 2:</strong> Navigate to <strong>Configuration → Application Settings</strong>
-        </div>
-        
-        <div class="step">
-            <strong>Step 3:</strong> Add each environment variable below (click "New application setting" for each one)
+        <div class="solution-box">
+            <strong>✅ Solution Created:</strong> I've created a production settings file that will work properly on Azure.
         </div>
 
-        <h2>🔧 Environment Variables to Add</h2>
+        <h2>�️ Quick Fix Steps</h2>
+        
+        <div class="step">
+            <strong>Step 1:</strong> Go to Azure App Service → Configuration → General Settings
+        </div>
+        
+        <div class="step">
+            <strong>Step 2:</strong> Update the <strong>Startup Command</strong> to:
+            <br><br>
+            <code class="code-inline">python manage.py setup_production && gunicorn sundar_marbles.wsgi:application --bind=0.0.0.0 --timeout 600</code>
+        </div>
+
+        <div class="step">
+            <strong>Step 3:</strong> Go to Configuration → Application Settings and add this ONE variable:
+            <br><br>
+            <strong>Name:</strong> <code class="code-inline">DJANGO_SETTINGS_MODULE</code><br>
+            <strong>Value:</strong> <code class="code-inline">sundar_marbles.settings_production</code>
+        </div>
+
+        <div class="step">
+            <strong>Step 4:</strong> Click <strong>"Save"</strong> and wait for restart (2-3 minutes)
+        </div>
+
+        <h2>✨ What This Fix Does</h2>
         
         <div class="important">
-            <strong>⚠️ Important:</strong> Copy each variable exactly as shown below. Make sure there are no extra spaces.
+            <strong>🎯 The production settings file I created includes:</strong>
+            <ul>
+                <li>✅ Your Azure domain in ALLOWED_HOSTS</li>
+                <li>✅ Your Neon PostgreSQL database connection</li>
+                <li>✅ CORS settings for your live website</li>
+                <li>✅ Automatic database migrations</li>
+                <li>✅ Static files configuration</li>
+                <li>✅ Admin user creation (admin/sundar123)</li>
+            </ul>
         </div>
 
-        <h3>Core Django Settings</h3>
-        <div class="env-var">
-            <strong>Name:</strong> DEBUG<br>
-            <strong>Value:</strong> False
-        </div>
-        
-        <div class="env-var">
-            <strong>Name:</strong> SECRET_KEY<br>
-            <strong>Value:</strong> kTvi#=!ucz6tMDQpqK=W#t0y^y7yzXxLUCN5xc^uy3F^MzAv(N
-        </div>
-        
-        <div class="env-var">
-            <strong>Name:</strong> ALLOWED_HOSTS<br>
-            <strong>Value:</strong> localhost,127.0.0.1,sundarmarbles.live,www.sundarmarbles.live,sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net
-        </div>
-
-        <h3>Database Configuration</h3>
-        <div class="env-var">
-            <strong>Name:</strong> DATABASE_URL<br>
-            <strong>Value:</strong> postgresql://neondb_owner:npg_ZzwJrU9kzI9F:WvOhSl7WP2FZqgzh2E2H1qQxvZvuE@ep-mute-hall-a5c2krpx.us-east-2.aws.neon.tech/neondb?sslmode=require
-        </div>
-
-        <h3>CORS Configuration</h3>
-        <div class="env-var">
-            <strong>Name:</strong> CORS_ALLOWED_ORIGINS<br>
-            <strong>Value:</strong> https://sundarmarbles.live,https://www.sundarmarbles.live,http://localhost:3000,http://localhost:5173
-        </div>
-
-        <h3>WhatsApp Integration</h3>
-        <div class="env-var">
-            <strong>Name:</strong> WHATSAPP_NUMBER<br>
-            <strong>Value:</strong> 923006641727
-        </div>
-        
-        <div class="env-var">
-            <strong>Name:</strong> WHATSAPP_API_URL<br>
-            <strong>Value:</strong> https://api.whatsapp.com/send
-        </div>
-
-        <h3>File Storage</h3>
-        <div class="env-var">
-            <strong>Name:</strong> MEDIA_URL<br>
-            <strong>Value:</strong> /media/
-        </div>
-        
-        <div class="env-var">
-            <strong>Name:</strong> STATIC_URL<br>
-            <strong>Value:</strong> /static/
-        </div>
-        
-        <div class="env-var">
-            <strong>Name:</strong> MEDIA_ROOT<br>
-            <strong>Value:</strong> media
-        </div>
-        
-        <div class="env-var">
-            <strong>Name:</strong> STATIC_ROOT<br>
-            <strong>Value:</strong> staticfiles
-        </div>
-
-        <h3>Email Configuration (Optional)</h3>
-        <div class="env-var">
-            <strong>Name:</strong> EMAIL_BACKEND<br>
-            <strong>Value:</strong> django.core.mail.backends.smtp.EmailBackend
-        </div>
-        
-        <div class="env-var">
-            <strong>Name:</strong> EMAIL_HOST<br>
-            <strong>Value:</strong> smtp.gmail.com
-        </div>
-        
-        <div class="env-var">
-            <strong>Name:</strong> EMAIL_PORT<br>
-            <strong>Value:</strong> 587
-        </div>
-        
-        <div class="env-var">
-            <strong>Name:</strong> EMAIL_USE_TLS<br>
-            <strong>Value:</strong> True
-        </div>
-
-        <h3>Admin Configuration</h3>
-        <div class="env-var">
-            <strong>Name:</strong> ADMIN_EMAIL<br>
-            <strong>Value:</strong> admin@sundarmarbles.com
-        </div>
-
-        <h2>🔄 Final Steps</h2>
+        <h2>🎉 After the Fix</h2>
         
         <ol>
-            <li>After adding all environment variables, click <strong>"Save"</strong> in Azure</li>
-            <li>Your app will automatically restart</li>
-            <li>Wait 2-3 minutes for the restart to complete</li>
-            <li>Visit your backend URL again: <a href="https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/" target="_blank">https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/</a></li>
-            <li>Access admin panel: <a href="https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/admin/" target="_blank">https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/admin/</a></li>
+            <li>Your backend will work: <a href="https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/" target="_blank">Test Backend</a></li>
+            <li>Admin panel will be available: <a href="https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net/admin/" target="_blank">Admin Panel</a></li>
+            <li>Login with: <strong>admin</strong> / <strong>sundar123</strong></li>
+            <li>API endpoints will work for your frontend</li>
         </ol>
 
-        <div class="success-box">
-            <strong>✅ Once Complete:</strong> Your Django backend will be fully functional with admin panel access at <code>/admin/</code> and API endpoints for your frontend integration.
+        <div class="solution-box">
+            <strong>🚀 One Setting Change = Complete Fix!</strong><br>
+            Instead of managing 15+ environment variables, this uses a production settings file with everything pre-configured.
         </div>
 
-        <h2>🔗 API Endpoints Available</h2>
-        <div class="code-block">
-GET /api/products/categories/     - Product categories
-GET /api/products/               - All products with filtering
-GET /api/products/featured/      - Featured products
-GET /api/gallery/categories/     - Gallery categories  
-GET /api/gallery/images/         - Gallery images
-POST /api/contact/messages/      - Submit contact form
-GET /api/contact/whatsapp/       - WhatsApp integration
+        <h2>🔗 API Endpoints (After Fix)</h2>
+        <ul>
+            <li><strong>Products:</strong> /api/products/</li>
+            <li><strong>Gallery:</strong> /api/gallery/</li>
+            <li><strong>Contact:</strong> /api/contact/</li>
+            <li><strong>Admin:</strong> /admin/</li>
+        </ul>
+        
+        <div class="important">
+            <strong>⚠️ Remember:</strong> Change the admin password after first login for security!
         </div>
     </div>
 </body>
