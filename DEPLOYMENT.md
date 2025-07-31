@@ -18,7 +18,7 @@ When deploying to Azure, configure these environment variables in the App Servic
 ```
 DEBUG=False
 SECRET_KEY=kTvi#=!ucz6tMDQpqK=W#t0y^y7yzXxLUCN5xc^uy3F^MzAv(N
-ALLOWED_HOSTS=localhost,127.0.0.1,sundarmarbles.live,www.sundarmarbles.live,sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net
+ALLOWED_HOSTS=sundarmarbles.live,www.sundarmarbles.live,sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net
 ```
 
 ### Database Configuration (Neon PostgreSQL)
@@ -28,7 +28,7 @@ DATABASE_URL=postgresql://neondb_owner:npg_ZzwJrU9kzI9F:WvOhSl7WP2FZqgzh2E2H1qQx
 
 ### CORS Settings (Updated for your live domain)
 ```
-CORS_ALLOWED_ORIGINS=https://sundarmarbles.live,https://www.sundarmarbles.live,http://localhost:3000,http://localhost:5173
+CORS_ALLOWED_ORIGINS=https://sundarmarbles.live,https://www.sundarmarbles.live
 ```
 
 ### WhatsApp Integration

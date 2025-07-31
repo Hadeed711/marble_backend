@@ -19,8 +19,8 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 # Allow all hosts for Azure (you can restrict this later)
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1', 
+    
+    
     'sundarmarbles.live',
     'www.sundarmarbles.live',
     'sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net',
@@ -127,8 +127,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     'https://sundarmarbles.live',
     'https://www.sundarmarbles.live',
-    'http://localhost:3000',
-    'http://localhost:5173',
+    
+    
 ]
 
 CORS_ALLOW_CREDENTIALS = True
