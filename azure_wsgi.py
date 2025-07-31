@@ -20,6 +20,19 @@ os.environ['SECRET_KEY'] = 'kTvi#=!ucz6tMDQpqK=W#t0y^y7yzXxLUCN5xc^uy3F^MzAv(N'
 os.environ['DATABASE_URL'] = 'postgresql://neondb_owner:npg_ZzwJrU9kzI9F:WvOhSl7WP2FZqgzh2E2H1qQxvZvuE@ep-mute-hall-a5c2krpx.us-east-2.aws.neon.tech/neondb?sslmode=require'
 os.environ['ALLOWED_HOSTS'] = 'sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net,localhost,127.0.0.1,sundarmarbles.live,www.sundarmarbles.live'
 
+# Test database connection before starting
+try:
+    import django
+    from django.conf import settings
+    django.setup()
+    
+    from django.db import connection
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT 1')
+        print("✅ Database connection successful in WSGI")
+except Exception as e:
+    print(f"❌ Database connection failed in WSGI: {e}")
+
 from django.core.wsgi import get_wsgi_application
 
 application = get_wsgi_application()

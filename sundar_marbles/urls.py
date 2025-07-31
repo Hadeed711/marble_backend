@@ -18,12 +18,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from .debug_views import debug_database, force_create_superuser
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/products/', include('products.urls')),
     path('api/gallery/', include('gallery.urls')),
     path('api/contact/', include('contact.urls')),
+    
+    # Debug endpoints for troubleshooting
+    path('debug/database/', debug_database, name='debug_database'),
+    path('debug/create-superuser/', force_create_superuser, name='force_create_superuser'),
 ]
 
 # Serve media files in development
