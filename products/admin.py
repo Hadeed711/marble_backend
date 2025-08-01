@@ -20,7 +20,7 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'price', 'is_active', 'is_featured', 'image_preview', 'created_at']
+    list_display = ['name', 'category', 'is_active', 'is_featured', 'image_preview', 'created_at']
     list_filter = ['category', 'is_active', 'is_featured', 'created_at']
     search_fields = ['name', 'description', 'meta_title']
     prepopulated_fields = {'slug': ('name',)}
@@ -31,8 +31,8 @@ class ProductAdmin(admin.ModelAdmin):
         ('Basic Information', {
             'fields': ('name', 'slug', 'description', 'category', 'image', 'image_preview')
         }),
-        ('Pricing & Specifications', {
-            'fields': ('price', 'origin', 'finish', 'thickness')
+        ('Specifications', {
+            'fields': ('origin', 'finish', 'thickness')
         }),
         ('SEO & Metadata', {
             'fields': ('meta_title', 'meta_description'),

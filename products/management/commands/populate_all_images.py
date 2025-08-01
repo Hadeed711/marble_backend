@@ -42,7 +42,6 @@ class Command(BaseCommand):
             {
                 'name': 'Black Gold Marble',
                 'description': 'Premium black marble with gold veining for luxury spaces',
-                'price': 12000,
                 'category': marble_category,
                 'image_file': 'black_gold.jpg',
                 'finish': 'Polished',
@@ -52,7 +51,6 @@ class Command(BaseCommand):
             {
                 'name': 'Star Black Marble',
                 'description': 'Elegant black marble with star patterns',
-                'price': 8500,
                 'category': marble_category,
                 'image_file': 'star_black.jpg',
                 'finish': 'Polished',
@@ -62,7 +60,6 @@ class Command(BaseCommand):
             {
                 'name': 'Taweera Granite',
                 'description': 'Durable granite with natural patterns',
-                'price': 9200,
                 'category': granite_category,
                 'image_file': 'taweera.png',
                 'finish': 'Polished',
@@ -72,7 +69,6 @@ class Command(BaseCommand):
             {
                 'name': 'Jet Black Marble',
                 'description': 'Deep black marble for modern designs',
-                'price': 7800,
                 'category': marble_category,
                 'image_file': 'jet_black.png',
                 'finish': 'Polished',
@@ -82,7 +78,6 @@ class Command(BaseCommand):
             {
                 'name': 'Tropical Grey Granite',
                 'description': 'Grey granite with tropical patterns',
-                'price': 10500,
                 'category': granite_category,
                 'image_file': 'tropical_grey.png',
                 'finish': 'Polished',
@@ -92,7 +87,6 @@ class Command(BaseCommand):
             {
                 'name': 'Booti Seena Granite',
                 'description': 'Classic granite with speckled finish',
-                'price': 8200,
                 'category': granite_category,
                 'image_file': 'booti_seena.png',
                 'finish': 'Polished',
@@ -102,7 +96,6 @@ class Command(BaseCommand):
             {
                 'name': 'Sunny White Marble',
                 'description': 'Bright white marble for luxury spaces',
-                'price': 6800,
                 'category': marble_category,
                 'image_file': 'sunny_white.jpg',
                 'finish': 'Polished',
@@ -112,7 +105,6 @@ class Command(BaseCommand):
             {
                 'name': 'Sunny Grey Marble',
                 'description': 'Sophisticated grey marble with subtle veining',
-                'price': 7200,
                 'category': marble_category,
                 'image_file': 'sunny_grey.jpg',
                 'finish': 'Polished',

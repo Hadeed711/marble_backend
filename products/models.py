@@ -33,12 +33,6 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     image = models.ImageField(upload_to='products/', help_text="Product image")
-    price = models.DecimalField(
-        max_digits=10, 
-        decimal_places=2, 
-        validators=[MinValueValidator(0)],
-        help_text="Price in PKR"
-    )
     
     # Product specifications
     origin = models.CharField(max_length=100, blank=True, help_text="Origin country/region")
