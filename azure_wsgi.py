@@ -11,8 +11,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(str(BASE_DIR))
 
-# FORCE debug settings for Azure temporarily
-os.environ['DJANGO_SETTINGS_MODULE'] = 'sundar_marbles.settings_debug'
+# FORCE production settings for Azure
+os.environ['DJANGO_SETTINGS_MODULE'] = 'sundar_marbles.settings_production'
 
 # Force critical environment variables
 os.environ['DEBUG'] = 'False'

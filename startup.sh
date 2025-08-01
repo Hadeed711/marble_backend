@@ -3,8 +3,8 @@
 # Azure App Service Startup Script for Django
 echo "=== Starting Sundar Marbles Django Backend ==="
 
-# Force debug environment temporarily
-export DJANGO_SETTINGS_MODULE=sundar_marbles.settings_debug
+# Force production environment
+export DJANGO_SETTINGS_MODULE=sundar_marbles.settings_production
 export DEBUG=False
 export SECRET_KEY="kTvi#=!ucz6tMDQpqK=W#t0y^y7yzXxLUCN5xc^uy3F^MzAv(N"
 export DATABASE_URL="postgresql://neondb_owner:npg_qrXsNK3Jpk8i@ep-divine-tooth-a8gxgnc6-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require"
