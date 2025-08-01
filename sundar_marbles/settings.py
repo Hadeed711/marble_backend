@@ -134,8 +134,23 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Azure Blob Storage configuration for media files
-if config('AZURE_ACCOUNT_NAME', default=None):
-    # Azure Blob Storage settings
+if config('AZURE_STORAGE_CONNECTION_STRING', default=None):
+    # Azure Blob Storage settings using connection string (preferred method)
+    AZURE_STORAGE_CONNECTION_STRING = config('AZURE_STORAGE_CONNECTION_STRING')
+    AZURE_CONTAINER = config('AZURE_CONTAINER', default='media')
+    
+    # Extract account name from connection string for media URL
+    import re
+    account_match = re.search(r'AccountName=([^;]+)', AZURE_STORAGE_CONNECTION_STRING)
+    AZURE_ACCOUNT_NAME = account_match.group(1) if account_match else 'sundarmarbles'
+    
+    # Use Azure Blob Storage for media files
+    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+    AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+    MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
+    
+elif config('AZURE_ACCOUNT_NAME', default=None):
+    # Azure Blob Storage settings using individual keys (fallback method)
     AZURE_ACCOUNT_NAME = config('AZURE_ACCOUNT_NAME')
     AZURE_ACCOUNT_KEY = config('AZURE_ACCOUNT_KEY')
     AZURE_CONTAINER = config('AZURE_CONTAINER', default='media')
