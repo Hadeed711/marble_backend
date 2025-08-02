@@ -160,6 +160,18 @@ CORS_ALLOWED_ORIGINS = config(
 
 CORS_ALLOW_CREDENTIALS = True
 
+# CSRF settings for Vercel routing
+CSRF_TRUSTED_ORIGINS = [
+    'https://sundarmarbles.live',
+    'https://www.sundarmarbles.live',
+    'https://sundar-bnhkawbtbbhjfxbz.eastasia-01.azurewebsites.net',
+]
+
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'None'
+
 # WhatsApp Configuration
 WHATSAPP_NUMBER = config('WHATSAPP_NUMBER', default='923006641727')
 WHATSAPP_API_URL = config('WHATSAPP_API_URL', default='https://api.whatsapp.com/send')
@@ -167,7 +179,7 @@ WHATSAPP_API_URL = config('WHATSAPP_API_URL', default='https://api.whatsapp.com/
 # Production security settings
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
+X_FRAME_OPTIONS = 'SAMEORIGIN'  # Changed from DENY to allow admin through domain routing
 
 # Static files compression
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
