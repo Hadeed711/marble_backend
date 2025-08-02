@@ -64,17 +64,23 @@ def upload_products_to_azure():
     print(f"Starting product upload to Azure Blob Storage...")
     print(f"Container: {AZURE_CONTAINER}")
     print(f"Account: {AZURE_ACCOUNT_NAME}")
+    print(f"Processing {len(product_mappings)} products...")
     
     uploaded_count = 0
     
-    for mapping in product_mappings:
+    for i, mapping in enumerate(product_mappings, 1):
+        print(f"\n📦 Processing product {i}/{len(product_mappings)}: {mapping['name']}")
         try:
             # Check if product already exists in database
             existing_product = Product.objects.filter(name=mapping['name']).first()
             
-            if existing_product and existing_product.image:
-                print(f"⏭️  Skipping {mapping['name']} - already has image")
-                continue
+            if existing_product:
+                print(f"🔍 Debug - {mapping['name']} current image: {str(existing_product.image) if existing_product.image else 'None'}")
+            
+            # Force upload to Azure Blob Storage (comment out the skip condition for now)
+            # if existing_product and existing_product.image and str(existing_product.image).startswith('products/'):
+            #     print(f"⏭️  Skipping {mapping['name']} - already uploaded to Azure Blob Storage")
+            #     continue
             
             # Full path to local image
             local_image_path = frontend_assets / mapping['file']
