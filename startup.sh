@@ -9,11 +9,6 @@ export DEBUG=False
 export SECRET_KEY="kTvi#=!ucz6tMDQpqK=W#t0y^y7yzXxLUCN5xc^uy3F^MzAv(N"
 export DATABASE_URL="postgresql://neondb_owner:npg_qrXsNK3Jpk8i@ep-divine-tooth-a8gxgnc6-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require"
 
-# CRITICAL: Run migrations to fix the price field issue
-echo "🔄 Running database migrations..."
-python manage.py migrate products --noinput
-echo "✅ Migrations completed"
-
 # Install dependencies
 echo "Installing dependencies..."
 pip install -r requirements.txt
