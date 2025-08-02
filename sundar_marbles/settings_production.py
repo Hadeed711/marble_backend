@@ -104,8 +104,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Azure Blob Storage configuration for media files
-if config('AZURE_STORAGE_CONNECTION_STRING', default=None):
+# Azure Blob Storage configuration for media files (temporarily disabled for debugging)
+# TODO: Re-enable after installing django-storages on Azure
+if False:  # Temporarily disabled
     # Azure Blob Storage settings using connection string (preferred method)
     AZURE_STORAGE_CONNECTION_STRING = config('AZURE_STORAGE_CONNECTION_STRING')
     AZURE_CONTAINER = config('AZURE_CONTAINER', default='media')
@@ -120,7 +121,7 @@ if config('AZURE_STORAGE_CONNECTION_STRING', default=None):
     AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
     MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
     
-elif config('AZURE_ACCOUNT_NAME', default=None):
+elif False:  # Temporarily disabled
     # Azure Blob Storage settings using individual keys (fallback method)
     AZURE_ACCOUNT_NAME = config('AZURE_ACCOUNT_NAME')
     AZURE_ACCOUNT_KEY = config('AZURE_ACCOUNT_KEY')
@@ -131,7 +132,7 @@ elif config('AZURE_ACCOUNT_NAME', default=None):
     AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
     MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
 else:
-    # Local media files (fallback for development)
+    # Local media files (fallback for development) - ACTIVE FOR NOW
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
 
