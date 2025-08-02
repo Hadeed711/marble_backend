@@ -134,16 +134,19 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Azure Blob Storage configuration for media files
-if not DEBUG:
-    # Production: Use Azure Blob Storage
+# Always use Azure Blob Storage if credentials are available
+if config('AZURE_ACCOUNT_NAME', default=None) and config('AZURE_ACCOUNT_KEY', default=None):
+    # Use Azure Blob Storage for media files
     AZURE_ACCOUNT_NAME = config('AZURE_ACCOUNT_NAME')
     AZURE_ACCOUNT_KEY = config('AZURE_ACCOUNT_KEY')
     AZURE_CONTAINER = config('AZURE_CONTAINER', default='media')
     
-    # Use Azure Blob Storage for media files
+    # Configure Azure Storage
     DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
     AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
     MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
+    
+    print(f"✅ Using Azure Blob Storage: {MEDIA_URL}")
     
 elif config('AZURE_STORAGE_CONNECTION_STRING', default=None):
     # Alternative: Azure Blob Storage settings using connection string
@@ -160,20 +163,12 @@ elif config('AZURE_STORAGE_CONNECTION_STRING', default=None):
     AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
     MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
     
-elif config('AZURE_ACCOUNT_NAME', default=None):
-    # Fallback: Azure Blob Storage settings using individual keys
-    AZURE_ACCOUNT_NAME = config('AZURE_ACCOUNT_NAME')
-    AZURE_ACCOUNT_KEY = config('AZURE_ACCOUNT_KEY')
-    AZURE_CONTAINER = config('AZURE_CONTAINER', default='media')
-    
-    # Use Azure Blob Storage for media files
-    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
-    AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
-    MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
+    print(f"✅ Using Azure Blob Storage (connection string): {MEDIA_URL}")
 else:
     # Local media files (fallback for development)
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
+    print(f"⚠️  Using local media storage: {MEDIA_URL}")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
