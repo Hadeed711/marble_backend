@@ -6,6 +6,7 @@ app_name = 'products'
 urlpatterns = [
     path('categories/', views.CategoryListView.as_view(), name='category-list'),
     path('categories/with-count/', views.product_categories_with_count, name='categories-with-count'),
+    path('debug/storage/', views.debug_storage, name='debug-storage'),
     path('', views.ProductListView.as_view(), name='product-list'),
     path('featured/', views.FeaturedProductsView.as_view(), name='featured-products'),
     path('<slug:slug>/', views.ProductDetailView.as_view(), name='product-detail'),

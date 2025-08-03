@@ -141,10 +141,23 @@ if config('AZURE_ACCOUNT_NAME', default=None) and config('AZURE_ACCOUNT_KEY', de
     AZURE_ACCOUNT_KEY = config('AZURE_ACCOUNT_KEY')
     AZURE_CONTAINER = config('AZURE_CONTAINER', default='media')
     
-    # Configure Azure Storage
-    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+    # Configure Azure Storage with proper settings for django-storages
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+    
+    # Azure Storage Settings
     AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
     MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
+    
+    # Additional Azure settings for proper operation
+    AZURE_CONNECTION_TIMEOUT_SECS = 60
+    AZURE_BLOB_MAX_MEMORY_SIZE = 2*1024*1024  # 2MB
     
     print(f"✅ Using Azure Blob Storage: {MEDIA_URL}")
     
@@ -158,14 +171,34 @@ elif config('AZURE_STORAGE_CONNECTION_STRING', default=None):
     account_match = re.search(r'AccountName=([^;]+)', AZURE_STORAGE_CONNECTION_STRING)
     AZURE_ACCOUNT_NAME = account_match.group(1) if account_match else 'sundarmarbles'
     
-    # Use Azure Blob Storage for media files
-    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+    # Configure Azure Storage with proper settings for django-storages
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+    
     AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
     MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
+    
+    # Additional Azure settings for proper operation
+    AZURE_CONNECTION_TIMEOUT_SECS = 60
+    AZURE_BLOB_MAX_MEMORY_SIZE = 2*1024*1024  # 2MB
     
     print(f"✅ Using Azure Blob Storage (connection string): {MEDIA_URL}")
 else:
     # Local media files (fallback for development)
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
     print(f"⚠️  Using local media storage: {MEDIA_URL}")
