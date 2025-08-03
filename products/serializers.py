@@ -22,14 +22,23 @@ class ProductImageSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
     additional_images = ProductImageSerializer(many=True, read_only=True)
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = [
             'id', 'name', 'slug', 'description', 'category', 'category_name',
-            'image', 'additional_images', 'price', 'origin', 'finish', 'thickness',
+            'image', 'image_url', 'additional_images', 'price', 'origin', 'finish', 'thickness',
             'is_active', 'is_featured', 'created_at'
         ]
+    
+    def get_image_url(self, obj):
+        if obj.image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url
+        return None
 
 
 class ProductCreateSerializer(serializers.ModelSerializer):

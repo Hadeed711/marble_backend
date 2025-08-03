@@ -184,7 +184,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 100  # Increased to show all gallery images
+    'PAGE_SIZE': 8  # Changed from 20 to 8 for better initial loading performance
 }
 
 # CORS settings
