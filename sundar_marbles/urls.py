@@ -18,24 +18,34 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from .debug_views import debug_database, force_create_superuser
-from .test_views import test_basic, test_database, test_login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/products/', include('products.urls')),
-    path('api/gallery/', include('gallery.urls')),
-    path('api/contact/', include('contact.urls')),
-    
-    # Debug endpoints for troubleshooting
-    path('debug/database/', debug_database, name='debug_database'),
-    path('debug/create-superuser/', force_create_superuser, name='force_create_superuser'),
-    
-    # Test endpoints
-    path('test/basic/', test_basic, name='test_basic'),
-    path('test/database/', test_database, name='test_database'),
-    path('test/login/', test_login, name='test_login'),
 ]
+
+# Only include other app URLs if they exist
+try:
+    from gallery.urls import urlpatterns as gallery_urls
+    urlpatterns.append(path('api/gallery/', include('gallery.urls')))
+except ImportError:
+    pass
+
+try:
+    from contact.urls import urlpatterns as contact_urls
+    urlpatterns.append(path('api/contact/', include('contact.urls')))
+except ImportError:
+    pass
+
+# Only include debug views if they exist
+try:
+    from .debug_views import debug_database, force_create_superuser
+    urlpatterns.extend([
+        path('debug/database/', debug_database, name='debug_database'),
+        path('debug/create-superuser/', force_create_superuser, name='force_create_superuser'),
+    ])
+except ImportError:
+    pass
 
 # Serve media files in development and production
 if settings.DEBUG:
@@ -43,6 +53,11 @@ if settings.DEBUG:
 else:
     # In production, serve media files through Django (Azure doesn't support static file serving by default)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Admin site customization
+admin.site.site_header = "Sundar Marbles Administration"
+admin.site.site_title = "Sundar Marbles Admin"
+admin.site.index_title = "Welcome to Sundar Marbles Administration"
 
 # Admin site customization
 admin.site.site_header = "Sundar Marbles Administration"

@@ -44,13 +44,30 @@ INSTALLED_APPS = [
     # Third party apps
     'rest_framework',
     'corsheaders',
-    'storages',
     
     # Local apps
     'products',
-    'gallery',
-    'contact',
 ]
+
+# Only add storages if Azure is configured
+try:
+    if config('AZURE_ACCOUNT_NAME', default=None) and config('AZURE_ACCOUNT_KEY', default=None):
+        INSTALLED_APPS.append('storages')
+except Exception:
+    pass
+
+# Only add other apps if they're properly configured
+try:
+    from gallery.models import GalleryCategory
+    INSTALLED_APPS.append('gallery')
+except Exception:
+    pass
+
+try:
+    from contact.models import ContactMessage  
+    INSTALLED_APPS.append('contact')
+except Exception:
+    pass
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
