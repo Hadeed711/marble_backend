@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'storages',  # Required for Azure Blob Storage (products only)
     'gallery',
     'contact',
     'products',
@@ -104,36 +105,94 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Azure Blob Storage configuration for media files (re-enabled for production)
-if not DEBUG:
-    # Production: Use Azure Blob Storage
-    AZURE_ACCOUNT_NAME = config('AZURE_ACCOUNT_NAME')
-    AZURE_ACCOUNT_KEY = config('AZURE_ACCOUNT_KEY')
-    AZURE_CONTAINER = config('AZURE_CONTAINER', default='media')
-    
-    # Use Azure Blob Storage for media files
-    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
-    AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
-    MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
-    
-elif config('AZURE_STORAGE_CONNECTION_STRING', default=None):
-    # Alternative: Azure Blob Storage settings using connection string
-    AZURE_STORAGE_CONNECTION_STRING = config('AZURE_STORAGE_CONNECTION_STRING')
-    AZURE_CONTAINER = config('AZURE_CONTAINER', default='media')
-    
-    # Extract account name from connection string for media URL
-    import re
-    account_match = re.search(r'AccountName=([^;]+)', AZURE_STORAGE_CONNECTION_STRING)
-    AZURE_ACCOUNT_NAME = account_match.group(1) if account_match else 'sundarmarbles'
-    
-    # Use Azure Blob Storage for media files
-    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
-    AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
-    MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
-else:
-    # Local media files (fallback for development) - ACTIVE FOR NOW
+# Azure Blob Storage configuration for media files (FIXED WITH NEW STORAGES SYNTAX)
+try:
+    if not DEBUG and config('AZURE_ACCOUNT_NAME', default=None) and config('AZURE_ACCOUNT_KEY', default=None):
+        # Production: Use Azure Blob Storage with NEW Django 4.2+ STORAGES syntax
+        AZURE_ACCOUNT_NAME = config('AZURE_ACCOUNT_NAME')
+        AZURE_ACCOUNT_KEY = config('AZURE_ACCOUNT_KEY')
+        AZURE_CONTAINER = config('AZURE_CONTAINER', default='media')
+        
+        # ✅ USE NEW STORAGES CONFIGURATION (Django 4.2+)
+        STORAGES = {
+            "default": {
+                "BACKEND": "storages.backends.azure_storage.AzureStorage",
+            },
+            "staticfiles": {
+                "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+            },
+        }
+        
+        # Azure Storage Settings
+        AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+        MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
+        
+        # Additional Azure settings for proper operation
+        AZURE_CONNECTION_TIMEOUT_SECS = 60
+        AZURE_BLOB_MAX_MEMORY_SIZE = 2*1024*1024  # 2MB
+        AZURE_OVERWRITE_FILES = True  # Allow overwriting existing files
+        AZURE_LOCATION = ''  # Root of container
+        
+        print(f"[SUCCESS] Production: Using Azure Blob Storage with NEW STORAGES syntax: {MEDIA_URL}")
+        
+    elif config('AZURE_STORAGE_CONNECTION_STRING', default=None):
+        # Alternative: Azure Blob Storage settings using connection string
+        AZURE_STORAGE_CONNECTION_STRING = config('AZURE_STORAGE_CONNECTION_STRING')
+        AZURE_CONTAINER = config('AZURE_CONTAINER', default='media')
+        
+        # Extract account name from connection string for media URL
+        import re
+        account_match = re.search(r'AccountName=([^;]+)', AZURE_STORAGE_CONNECTION_STRING)
+        AZURE_ACCOUNT_NAME = account_match.group(1) if account_match else 'sundarmarbles'
+        
+        # ✅ USE NEW STORAGES CONFIGURATION (Django 4.2+)
+        STORAGES = {
+            "default": {
+                "BACKEND": "storages.backends.azure_storage.AzureStorage",
+            },
+            "staticfiles": {
+                "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+            },
+        }
+        
+        AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+        MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
+        
+        # Additional Azure settings for proper operation
+        AZURE_CONNECTION_TIMEOUT_SECS = 60
+        AZURE_BLOB_MAX_MEMORY_SIZE = 2*1024*1024  # 2MB
+        AZURE_OVERWRITE_FILES = True  # Allow overwriting existing files
+        AZURE_LOCATION = ''  # Root of container
+        
+        print(f"[SUCCESS] Production: Using Azure Blob Storage (connection string) with NEW STORAGES syntax: {MEDIA_URL}")
+    else:
+        # Local media files (fallback)
+        STORAGES = {
+            "default": {
+                "BACKEND": "django.core.files.storage.FileSystemStorage",
+            },
+            "staticfiles": {
+                "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+            },
+        }
+        MEDIA_URL = '/media/'
+        MEDIA_ROOT = BASE_DIR / 'media'
+        print(f"[WARNING] Production: Using local media storage: {MEDIA_URL}")
+
+except Exception as e:
+    # Fallback to local storage if Azure configuration fails
+    print(f"[WARNING] Azure storage configuration failed: {e}")
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
+    print(f"[FALLBACK] Falling back to local media storage: {MEDIA_URL}")
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

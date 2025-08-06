@@ -47,25 +47,14 @@ INSTALLED_APPS = [
     
     # Local apps
     'products',
+    'gallery',
+    'contact',
 ]
 
 # Only add storages if Azure is configured
 try:
     if config('AZURE_ACCOUNT_NAME', default=None) and config('AZURE_ACCOUNT_KEY', default=None):
         INSTALLED_APPS.append('storages')
-except Exception:
-    pass
-
-# Only add other apps if they're properly configured
-try:
-    from gallery.models import GalleryCategory
-    INSTALLED_APPS.append('gallery')
-except Exception:
-    pass
-
-try:
-    from contact.models import ContactMessage  
-    INSTALLED_APPS.append('contact')
 except Exception:
     pass
 
@@ -179,7 +168,7 @@ try:
         AZURE_OVERWRITE_FILES = True  # Allow overwriting existing files
         AZURE_LOCATION = ''  # Root of container
         
-        print(f"✅ Using Azure Blob Storage: {MEDIA_URL}")
+        print(f"[SUCCESS] Using Azure Blob Storage: {MEDIA_URL}")
         
     elif config('AZURE_STORAGE_CONNECTION_STRING', default=None):
         # Alternative: Azure Blob Storage settings using connection string
@@ -210,7 +199,7 @@ try:
         AZURE_OVERWRITE_FILES = True  # Allow overwriting existing files
         AZURE_LOCATION = ''  # Root of container
         
-        print(f"✅ Using Azure Blob Storage (connection string): {MEDIA_URL}")
+        print(f"[SUCCESS] Using Azure Blob Storage (connection string): {MEDIA_URL}")
     else:
         # Local media files (fallback for development)
         STORAGES = {
@@ -223,11 +212,11 @@ try:
         }
         MEDIA_URL = '/media/'
         MEDIA_ROOT = BASE_DIR / 'media'
-        print(f"⚠️  Using local media storage: {MEDIA_URL}")
+        print(f"[WARNING] Using local media storage: {MEDIA_URL}")
 
 except Exception as e:
     # Fallback to local storage if Azure configuration fails
-    print(f"⚠️  Azure storage configuration failed: {e}")
+    print(f"[WARNING] Azure storage configuration failed: {e}")
     STORAGES = {
         "default": {
             "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -238,10 +227,10 @@ except Exception as e:
     }
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
-    print(f"🔄 Falling back to local media storage: {MEDIA_URL}")
+    print(f"[FALLBACK] Falling back to local media storage: {MEDIA_URL}")
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
-    print(f"⚠️  Using local media storage: {MEDIA_URL}")
+    print(f"[WARNING] Using local media storage: {MEDIA_URL}")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
